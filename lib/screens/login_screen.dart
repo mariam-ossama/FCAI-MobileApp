@@ -46,11 +46,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){Navigator.pop(context);},
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,),
+            ),
         title: Text(
           'Login Screen',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 1, 31, 56),
       ),
       body: ListView(
         padding: EdgeInsets.all(20),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_local_db/DatabaseHelper.dart';
+import 'package:mobile_local_db/screens/edit_profile_screen.dart';
+import 'package:mobile_local_db/widgets/buttomNavigationBar.dart';
 import 'package:mobile_local_db/widgets/custom_view_card.dart';
 import 'package:mobile_local_db/widgets/custum_button.dart';
-import 'package:mobile_local_db/DatabaseHelper.dart'; // Import your DatabaseHelper class
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
 
 class ProfilePage extends StatefulWidget {
-   String? userEmail;
+  final String? userEmail;
 
   ProfilePage({Key? key, this.userEmail}) : super(key: key);
 
@@ -50,11 +52,20 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
           'Your Profile',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 1, 31, 56),
       ),
       body: ListView(
         children: [
@@ -64,19 +75,19 @@ class _ProfilePageState extends State<ProfilePage> {
               alignment: Alignment.bottomRight,
               children: [
                 CircleAvatar(
-  radius: 90,
-  backgroundColor: Colors.transparent,
-  child: ClipOval(
-    child: _profilePhoto != null
-      ? Image.memory(
-          _profilePhoto!,
-          fit: BoxFit.cover,
-          width: 180.0,
-          height: 180.0,
-        )
-      : Icon(Icons.person, size: 90),
-  ),
-),
+                  radius: 90,
+                  backgroundColor: Colors.grey[300],
+                  child: ClipOval(
+                    child: _profilePhoto != null
+                        ? Image.memory(
+                            _profilePhoto!,
+                            fit: BoxFit.cover,
+                            width: 180.0,
+                            height: 180.0,
+                          )
+                        : Icon(Icons.person, size: 90),
+                  ),
+                ),
                 Container(
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
@@ -86,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.blue,
+                      color: Color.fromARGB(255, 1, 31, 56),
                     ),
                     child: IconButton(
                       icon: Icon(Icons.edit, color: Colors.white),
@@ -128,13 +139,23 @@ class _ProfilePageState extends State<ProfilePage> {
           CustomButton(
             text: 'Edit Profile',
             onPressed: () {
-              Navigator.pushNamed(context, 'EditProfilePage');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfilePage(userEmail: email),
+                ),
+              );
             },
+          ),
+          SizedBox(
+            height: 15,
           )
         ],
       ),
+      bottomNavigationBar: MyNavigationBar()
     );
   }
+
   Future<void> _showImagePickerDialog() async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile =
@@ -150,5 +171,3 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 }
-
-  

@@ -11,13 +11,19 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){Navigator.pop(context);},
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,),
+            ),
         title: Text(
           'Sign Up Screen',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 1, 31, 56),
       ),
       body: SignUpForm(),
     );

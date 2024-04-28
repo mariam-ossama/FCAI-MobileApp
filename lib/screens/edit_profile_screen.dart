@@ -1,14 +1,14 @@
-
+import 'package:flutter/material.dart';
 import 'package:mobile_local_db/DatabaseHelper.dart';
+import 'package:mobile_local_db/screens/profile_screen.dart';
+import 'package:mobile_local_db/widgets/buttomNavigationBar.dart';
 import 'package:mobile_local_db/widgets/custom_text_field.dart';
 import 'package:mobile_local_db/widgets/custum_button.dart';
-import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class EditProfilePage extends StatefulWidget {
-   EditProfilePage({super.key});
+  final String userEmail;
 
+  EditProfilePage({Key? key, required this.userEmail}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfileScreenState();
@@ -28,27 +28,64 @@ class _EditProfileScreenState extends State<EditProfilePage> {
     super.initState();
     // Fetch user data when the widget is initialized
   }
-  
+
   void saveChanges(BuildContext context) async {
-  await dbHelper.updateUserData({
-    'name': nameController.text,
-    'gender': genderController.text,
-    //'email': emailController.text,
-    'studentId': idController.text,
-    'level': levelController.text,
-  });
-  Navigator.pushNamed(context, 'ProfilePage');
-}
+    // Fetch the current user data
+    Map<String, dynamic>? currentUserData =
+        await dbHelper.getUserDataByEmail(widget.userEmail);
+
+    if (currentUserData != null) {
+      // Prepare the data to be updated
+      Map<String, dynamic> updatedData = {
+        'name': nameController.text.isNotEmpty
+            ? nameController.text
+            : currentUserData['name'],
+        'gender': genderController.text.isNotEmpty
+            ? genderController.text
+            : currentUserData['gender'],
+        'studentId': idController.text.isNotEmpty
+            ? idController.text
+            : currentUserData['studentId'],
+        'level': levelController.text.isNotEmpty
+            ? levelController.text
+            : currentUserData['level'],
+      };
+
+      // Update user data by email
+      await dbHelper.updateUserDataByEmail(
+        email: widget.userEmail,
+        data: updatedData,
+      );
+
+      // Navigate to ProfilePage
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(userEmail: widget.userEmail),
+        ),
+      );
+    } else {
+      // Handle the case where user data couldn't be fetched
+      // You might want to show an error message or handle it based on your app's logic
+      print('User data not found');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){Navigator.pop(context);},
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,),
+            ),
         title: Text(
           'Edit your profile',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 1, 31, 56),
       ),
       body: ListView(
         children: [
@@ -77,7 +114,7 @@ class _EditProfileScreenState extends State<EditProfilePage> {
           ),
           CustomTextField(
             obsText: false,
-            controllerText: emailController,
+            controllerText: emailController..text = widget.userEmail,
             hint: 'Update your email',
             label: 'Email',
             icon: Icon(Icons.email),
@@ -85,11 +122,13 @@ class _EditProfileScreenState extends State<EditProfilePage> {
           SizedBox(
             height: 10,
           ),
-          CustomTextField(obsText: false,
-          controllerText: idController,
-          hint: 'i.e, 20200001',
-          icon: Icon(Icons.perm_identity),
-          label: 'ID',),
+          CustomTextField(
+            obsText: false,
+            controllerText: idController,
+            hint: 'i.e, 20200001',
+            icon: Icon(Icons.perm_identity),
+            label: 'ID',
+          ),
           SizedBox(
             height: 10,
           ),
@@ -105,7 +144,7 @@ class _EditProfileScreenState extends State<EditProfilePage> {
           ),
           CustomButton(
             text: 'Save Changes',
-            onPressed: ()  async{
+            onPressed: () async {
               saveChanges(context);
             },
           ),
@@ -115,11 +154,18 @@ class _EditProfileScreenState extends State<EditProfilePage> {
           CustomButton(
             text: 'My Profile',
             onPressed: () {
-              Navigator.pushNamed(context, 'ProfilePage');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ProfilePage(userEmail: widget.userEmail),
+                ),
+              );
             },
           )
         ],
       ),
+      bottomNavigationBar: MyNavigationBar(),
     );
   }
 }

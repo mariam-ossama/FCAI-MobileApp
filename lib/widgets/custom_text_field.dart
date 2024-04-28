@@ -18,7 +18,6 @@ class CustomTextField extends StatelessWidget {
       padding:const EdgeInsets.all(8),
       child: TextFormField(
                     controller: controllerText,
-                    //onFieldSubmitted: onSubmit,
                     validator: valid,
                     decoration: InputDecoration(
                       hintText: hint,
