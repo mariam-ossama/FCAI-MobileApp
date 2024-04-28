@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:label="mobile_local_db"
         android:name="${applicationName}"
@@ -29,7 +32,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <meta-data
+    android:name="com.google.android.gms.location.api.DATALOGGER_IMPLEMENTATION_CLASS_NAME"
+    android:value="com.google.android.gms.location.internal.LocationProviderImpl" />
+    <meta-data
+    android:name="com.google.android.gms.location.api.NETWORK_LOCATION_IMPLEMENTATION_CLASS_NAME"
+    android:value="com.google.android.gms.location.internal.FusedLocationProviderClientImpl" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 </manifest>

@@ -36,7 +36,7 @@ class _MyFavStoresPageState extends State<MyFavStoresPage> {
           return CustomStoreCard(
             store: favoriteStores[index],
             onTap: () {
-              favoriteStoresModel.toggleFavorite(favoriteStores[index]);
+              Navigator.pop(context, favoriteStores[index]);
             },
           );
         },
