@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:mobile_local_db/database_Store.dart';
 import 'package:mobile_local_db/models/fovorite_stores_model.dart';
 import 'package:mobile_local_db/models/store_model.dart';
 import 'package:provider/provider.dart';
@@ -50,19 +51,20 @@ class _CustomStoreCardState extends State<CustomStoreCard> {
                             ),
                           ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             if (widget.store.storeType != null)
                               Text(
                                 widget.store.storeType!,
                               ),
-                            SizedBox(width: 20),
+                            //SizedBox(width: 20),
                             Icon(Icons.location_on),
                             if (widget.store.location != null)
                               Text(
                                 widget.store.location!,
                                 style: TextStyle(),
                               ),
-                              SizedBox(width: 100,),
+                              //SizedBox(width: 100,),
                             IconButton(
                               icon: Icon(
                                 widget.store.is_favourite ?? false
@@ -72,15 +74,12 @@ class _CustomStoreCardState extends State<CustomStoreCard> {
                                     ? Color.fromARGB(255, 132, 119, 1)
                                     : null,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  widget.store.is_favourite =
-                                      !(widget.store.is_favourite ?? false);
-
-                                  Provider.of<FavoriteStoresModel>(context, listen: false)
-                                  .toggleFavorite(widget.store);
-                                });
-                              },
+                              onPressed: () async {
+  setState(() {
+    widget.store.is_favourite = !(widget.store.is_favourite ?? false);
+  });
+  await StoreDatabaseHelper().updateFavorite(widget.store.id, widget.store.is_favourite ?? false);
+},
                             ),
                           ],
                         ),

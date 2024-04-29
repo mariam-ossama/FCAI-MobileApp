@@ -1,38 +1,19 @@
-
-
 import 'package:flutter/material.dart';
 import 'store_model.dart';
 
 class FavoriteStoresModel extends ChangeNotifier {
-  List <StoreModel> _favoriteStores = [
-    /*StoreModel(
-      id: 1,
-      storeName: 'vvvvvvv',
-      storeType: 'Clothing',
-      location: 'Cairo'
-    ),
-    StoreModel(
-      id: 2,
-      storeName: 'vvvvvvv',
-      storeType: 'Clothing',
-      location: 'Cairo'
-    ),
-    StoreModel(
-      id: 3,
-      storeName: 'vvvvvvv',
-      storeType: 'Clothing',
-      location: 'Cairo'
-    ),*/
-  ];
+  final List<StoreModel> _favoriteStores = [];
 
   List<StoreModel> get favoriteStores => _favoriteStores;
 
   void toggleFavorite(StoreModel store) {
-    if (_favoriteStores.contains(store)) {
+    final isFavorite = _favoriteStores.contains(store);
+    if (isFavorite) {
       _favoriteStores.remove(store);
     } else {
       _favoriteStores.add(store);
     }
+    store.is_favourite = !isFavorite; // Update favourite flag in store model
     notifyListeners();
   }
 }
